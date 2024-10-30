@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
 
 const vehicleType = [
   "Sedan",
@@ -27,8 +28,9 @@ const services = [
 ];
 
 function Income() {
-  const [theArray, setTheArray] = useState([]);
-  const [theObject, setTheObject] = useState({});
+  const [sales, setSales] = useState([]);
+  const [plateNumber, setPlateNumber] = useState("");
+  const [priceInput, setPriceInput] = useState();
 
   const {
     register,
@@ -38,21 +40,23 @@ function Income() {
   } = useForm();
 
   function onSubmit(data) {
-    setTheArray((prevArray) => [...prevArray, data]);
-    // console.log(theArray);
-    // enteredData.push(data);
-    // setTesting(() => testing.push(data));
-    // console.log(typeof testing);
-    // setTesting(() => testing.push(data));
-    // console.log(testing);
-    // enteredData.push(data);
-    // console.log(enteredData);
+    setSales((prevArray) => [...prevArray, data]);
+  }
+
+  function handleChange(e) {
+    const uppercase = e.target.value.toUpperCase();
+    setPlateNumber(uppercase);
+  }
+
+  function priceChange(e) {
+    setPriceInput(Number(e.target.value));
+    console.log(priceInput);
   }
 
   return (
     <div className="incomeWrapper">
       <div>
-        <div className="incomeHeader">Enter your income here</div>
+        <div className="incomeHeader">SALES INPUT</div>
         <div>
           <form className="incomeContent">
             <select {...register("vehicleType")}>
@@ -61,9 +65,11 @@ function Income() {
               ))}
             </select>
             <input
-              {...register("plateNumber")}
+              {...register("plateNumber", { required: true })}
               type="text"
               placeholder="Plate Number"
+              value={plateNumber}
+              onChange={handleChange}
             ></input>
             <select {...register("services")}>
               {services.map((el, i) => (
@@ -71,36 +77,71 @@ function Income() {
               ))}
             </select>
             <input
-              {...register("price")}
+              {...register("price", { required: true })}
               type="number"
               placeholder="Price"
+              // onChange={priceChange}
+              // value={priceInput.toLocaleString()}
             ></input>
+            {/* <NumericFormat
+              thousandSeparator={true}
+              prefix={"PHP "}
+              name="price"
+            /> */}
+            {errors.plateNumber && (
+              <span className="errorPlateNumber">Plate number is required</span>
+            )}
+            {errors.price && (
+              <span className="errorPrice">Price is required</span>
+            )}
+
             <button onClick={handleSubmit(onSubmit)} className="addIncome">
-              ADD INCOME
+              ADD SALES
             </button>
           </form>
         </div>
       </div>
-      <div>
-        <div className="incomeTable">
+
+      <div className="tableWrapper">
+        <table className="incomeTable">
+          <tbody>
+            <tr>
+              <th>Vehicle Type</th>
+              <th>Plate Number</th>
+              <th>Services</th>
+              <th>Price</th>
+            </tr>
+            {sales.map((el) => (
+              <>
+                <tr>
+                  <td>{el.vehicleType}</td>
+                  <td>{el.plateNumber}</td>
+                  <td>{el.services}</td>
+                  <td>{Number(el.price).toLocaleString()}</td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* <div className="incomeTable">
+        <div className="tableHeadingWrapper">
           <div className="tableHeading">Vehicle Type</div>
           <div className="tableHeading">Plate Number</div>
           <div className="tableHeading">Availed Service</div>
           <div className="tableHeading">Price</div>
-          {theArray.map((el) => (
-            <>
-              <div className="tableHeading">{el.vehicleType}</div>
-              <div className="tableHeading">{el.plateNumber}</div>
-              <div className="tableHeading">{el.services}</div>
-              <div className="tableHeading">{el.price}</div>
-            </>
-          ))}
-          {/* <div className="tableHeading">Vehicle Type</div>
-          <div className="tableHeading">Plate Number</div>
-          <div className="tableHeading">Availed Service</div>
-          <div className="tableHeading">Price</div> */}
         </div>
-      </div>
+
+        {theArray.map((el) => (
+          <div className="tableBodyContainer">
+            <div className="tableBody">{el.vehicleType}</div>
+            <div className="tableBody">{el.plateNumber}</div>
+            <div className="tableBody">{el.services}</div>
+            <div className="tableBody">{el.price}</div>
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 }

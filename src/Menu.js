@@ -20,7 +20,7 @@ function Menu() {
         <span className="icon">
           <IoMdBook />
         </span>
-        <span>Income</span>
+        <span>Sales</span>
       </div>
       <div onClick={() => dispatch(expenses())} className="menuLinks expenses">
         <span className="icon">
