@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import { NumericFormat } from "react-number-format";
 
 const vehicleType = [
@@ -28,19 +29,27 @@ const services = [
 ];
 
 function Income() {
+  const id = useId();
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
   const [priceInput, setPriceInput] = useState();
+  const [resetId, setResetId] = useState(id);
+
+  const ref = useRef();
 
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm();
 
   function onSubmit(data) {
     setSales((prevArray) => [...prevArray, data]);
+    setResetId("");
+    // console.log(ref.current.value);
+    reset();
   }
 
   function handleChange(e) {
@@ -53,12 +62,31 @@ function Income() {
     console.log(priceInput);
   }
 
+  function actionClick(e) {
+    // console.log(e.target.id);
+
+    const deleteItem = sales.filter((number) => number.id !== e.target.id);
+    // sales.filter((number) => console.log(number.id));
+    // console.log(sales[e.target.id]);
+    // console.log(e.target.id);
+    // sales.filter((number) => console.log(number.id));
+    // console.log(e.target.id); // Outputs: [1, 2, 4, 5]
+    setSales(deleteItem);
+  }
+
   return (
     <div className="incomeWrapper">
       <div>
         <div className="incomeHeader">SALES INPUT</div>
         <div>
           <form className="incomeContent">
+            <input
+              {...register("id")}
+              type="text"
+              placeholder="Id"
+              value={sales.length}
+              hidden
+            ></input>
             <select {...register("vehicleType")}>
               {vehicleType.map((el, i) => (
                 <option key={i}>{el}</option>
@@ -68,8 +96,6 @@ function Income() {
               {...register("plateNumber", { required: true })}
               type="text"
               placeholder="Plate Number"
-              value={plateNumber}
-              onChange={handleChange}
             ></input>
             <select {...register("services")}>
               {services.map((el, i) => (
@@ -80,9 +106,8 @@ function Income() {
               {...register("price", { required: true })}
               type="number"
               placeholder="Price"
-              // onChange={priceChange}
-              // value={priceInput.toLocaleString()}
             ></input>
+
             {/* <NumericFormat
               thousandSeparator={true}
               prefix={"PHP "}
@@ -110,14 +135,24 @@ function Income() {
               <th>Plate Number</th>
               <th>Services</th>
               <th>Price</th>
+              <th className="actionHeading">Actions</th>
             </tr>
-            {sales.map((el) => (
+            {sales.map((el, i) => (
               <>
-                <tr>
+                <tr className="incomeTableBody">
                   <td>{el.vehicleType}</td>
                   <td>{el.plateNumber}</td>
                   <td>{el.services}</td>
                   <td>{Number(el.price).toLocaleString()}</td>
+                  <td className="actions">
+                    <span
+                      className="actionsIcon"
+                      onClick={actionClick}
+                      id={el.id}
+                    >
+                      <RiDeleteBin5Line />
+                    </span>
+                  </td>
                 </tr>
               </>
             ))}

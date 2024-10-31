@@ -148,7 +148,7 @@ ad0001 */
   grid-template-columns: 1fr;
   height: 550px;
   overflow-y: scroll;
-  font-size: large;
+  font-size: small;
   margin-top: 10px;
   padding: 5px;
 }
@@ -160,7 +160,7 @@ ad0001 */
 
 .incomeTable tr th {
   border-spacing: 0cap;
-  width: 25%;
+  width: 20%;
   padding: 5px;
   border: solid 1px rgb(48, 47, 47);
   background-color: rgb(0, 0, 0);
@@ -168,7 +168,7 @@ ad0001 */
 
 .incomeTable tr td {
   border-spacing: 0cap;
-  width: 25%;
+  width: 20%;
   padding: 3px;
   border: solid 1px rgb(65, 65, 65);
   background-color: rgb(26, 26, 26);
@@ -190,3 +190,17 @@ ad0001 */
   /* color: rgb(122, 8, 8); */
   color: white;
 }
+
+.incomeTableBody {
+  height: 50px;
+}
+
+.actionsIcon {
+  padding: 10px;
+  font-size: large;
+  background-color: rgb(80, 78, 78);
+}
+
+/* .actions:hover {
+  cursor: pointer;
+} */
