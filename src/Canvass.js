@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Income from "./Income";
+import Sales from "./Sales";
 import Expenses from "./Expenses";
 import Ledger from "./Ledger";
 import Report from "./Report";
@@ -10,8 +10,8 @@ function Canvass() {
 
   return (
     <div className="canvassWrapper sectionContainer">
-      <span>{test.value === "" && <Income />}</span>
-      <span>{test.value === "income" && <Income />}</span>
+      <span>{test.value === "" && <Sales />}</span>
+      <span>{test.value === "income" && <Sales />}</span>
       <span>{test.value === "expenses" && <Expenses />}</span>
       <span>{test.value === "ledger" && <Ledger />}</span>
       <span>{test.value === "report" && <Report />}</span>
