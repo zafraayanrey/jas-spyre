@@ -1,10 +1,7 @@
 import { format } from "@react-input/number-format";
-import React, { useId, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
-// import toast, { Toaster } from "react-hot-toast";
-
-// import toast, { Toaster } from "react-hot-toast";
-
+import toast, { Toaster } from "react-hot-toast";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const vehicleType = [
@@ -34,15 +31,19 @@ const services = [
 
 const options = { locales: "en", maximumFractionDigits: 2 };
 
+const currentDate = new Date();
+const today = `${currentDate.getFullYear()}-${
+  currentDate.getMonth() + 1
+}-${currentDate.getDate()}`;
 function Sales() {
   // const inputRef = useNumberFormat(options);
   // const defaultValue = format(0, options);
 
   const [value, setValue] = useState();
-
-  const id = useId();
+  const [id, setId] = useState(1);
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
+  const [date, setDate] = useState(today);
 
   const {
     register,
@@ -54,8 +55,8 @@ function Sales() {
 
   function onSubmit(data) {
     setSales((prevArray) => [...prevArray, data]);
-    // toast.success("1 Record has been added!");
-    // toast("Here is your toast.");
+    setId(() => id + 1);
+    toast.success("1 Record Added Successfully!");
     reset();
     setValue("");
     setPlateNumber("");
@@ -72,20 +73,21 @@ function Sales() {
   }
 
   function actionClick(e) {
-    // console.log(e.target.id);
-
     const deleteItem = sales.filter((number) => number.id !== e.target.id);
-    // sales.filter((number) => console.log(number.id));
-    // console.log(sales[e.target.id]);
-    // console.log(e.target.id);
-    // sales.filter((number) => console.log(number.id));
-    // console.log(e.target.id); // Outputs: [1, 2, 4, 5]
     setSales(deleteItem);
+  }
+
+  function dateChange(e) {
+    setDate(e.target.value);
   }
 
   return (
     <div className="incomeWrapper">
-      {/* <Toaster /> */}
+      <Toaster
+        toastOptions={{
+          className: "toaster",
+        }}
+      />
       {/* <Toaster /> */}
       <div>
         <div className="incomeHeader">SALES INPUT</div>
@@ -95,9 +97,18 @@ function Sales() {
               {...register("id")}
               type="text"
               placeholder="Id"
-              value={sales.length}
+              value={id}
               hidden
             ></input>
+            <input
+              {...register("date")}
+              type="date"
+              onChange={dateChange}
+              // defaultValue={today}
+              value={date}
+              className="date"
+            ></input>
+
             <select {...register("vehicleType")}>
               {vehicleType.map((el, i) => (
                 <option key={i}>{el}</option>
@@ -147,6 +158,7 @@ function Sales() {
         <table className="incomeTable">
           <tbody>
             <tr>
+              <th>Date</th>
               <th>Vehicle Type</th>
               <th>Plate Number</th>
               <th>Services</th>
@@ -156,6 +168,7 @@ function Sales() {
             {sales.map((el, i) => (
               <>
                 <tr className="incomeTableBody">
+                  <td>{el.date}</td>
                   <td>{el.vehicleType}</td>
                   <td>{el.plateNumber}</td>
                   <td>{el.services}</td>
@@ -167,7 +180,6 @@ function Sales() {
                       id={el.id}
                     >
                       <RiDeleteBin5Line />
-                      {/* DELETE */}
                     </span>
                   </td>
                 </tr>
