@@ -2,6 +2,8 @@ import { format } from "@react-input/number-format";
 import React, { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import { FaRegSave } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const vehicleType = [
@@ -35,11 +37,12 @@ const currentDate = new Date();
 const today = `${currentDate.getFullYear()}-${
   currentDate.getMonth() + 1
 }-${currentDate.getDate()}`;
+
 function Sales() {
   // const inputRef = useNumberFormat(options);
   // const defaultValue = format(0, options);
 
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(0);
   const [id, setId] = useState(1);
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
@@ -54,9 +57,12 @@ function Sales() {
   } = useForm();
 
   function onSubmit(data) {
+    // console.log(data.date);
+    // if (data.date === "") return "Zaf";
+    data.date === "" && (data.date = "Not Specified");
     setSales((prevArray) => [...prevArray, data]);
     setId(() => id + 1);
-    toast.success("1 Record Added Successfully!");
+    toast.success("Transaction Added!");
     reset();
     setValue("");
     setPlateNumber("");
@@ -72,9 +78,18 @@ function Sales() {
     setValue(format(formattedNumber, options));
   }
 
+  function priceClick() {
+    setValue("");
+  }
+
+  function priceFocus() {
+    setValue("");
+  }
+
   function actionClick(e) {
     const deleteItem = sales.filter((number) => number.id !== e.target.id);
     setSales(deleteItem);
+    toast.success("Deleted");
   }
 
   function dateChange(e) {
@@ -86,6 +101,18 @@ function Sales() {
       <Toaster
         toastOptions={{
           className: "toaster",
+          success: {
+            iconTheme: {
+              primary: "white",
+            },
+          },
+          icon: (
+            <span
+              style={{ display: "grid", color: "white", fontSize: "large" }}
+            >
+              <FaRegSave />
+            </span>
+          ), // Custom check icon color
         }}
       />
       {/* <Toaster /> */}
@@ -101,11 +128,11 @@ function Sales() {
               hidden
             ></input>
             <input
-              {...register("date")}
+              {...register("date", { required: true })}
               type="date"
               onChange={dateChange}
               // defaultValue={today}
-              value={date}
+              // value={date}
               className="date"
             ></input>
 
@@ -130,7 +157,9 @@ function Sales() {
               {...register("price", { required: true })}
               type="text"
               placeholder="Price"
+              onClick={priceClick}
               onChange={priceChange}
+              onFocus={priceFocus}
               value={value}
               // ref={inputRef}
             ></input>
@@ -140,6 +169,7 @@ function Sales() {
               prefix={"PHP "}
               name="price"
             /> */}
+            {errors.date && <span className="errorDate">Date is required</span>}
             {errors.plateNumber && (
               <span className="errorPlateNumber">Plate number is required</span>
             )}
@@ -148,46 +178,53 @@ function Sales() {
             )}
 
             <button onClick={handleSubmit(onSubmit)} className="addIncome">
-              ADD SALES
+              ADD
             </button>
           </form>
         </div>
       </div>
 
-      <div className="tableWrapper">
-        <table className="incomeTable">
-          <tbody>
-            <tr>
-              <th>Date</th>
-              <th>Vehicle Type</th>
-              <th>Plate Number</th>
-              <th>Services</th>
-              <th>Price</th>
-              <th className="actionHeading">Actions</th>
-            </tr>
-            {sales.map((el, i) => (
-              <>
-                <tr className="incomeTableBody">
-                  <td>{el.date}</td>
-                  <td>{el.vehicleType}</td>
-                  <td>{el.plateNumber}</td>
-                  <td>{el.services}</td>
-                  <td>{el.price}</td>
-                  <td className="actions">
-                    <span
-                      className="actionsIcon"
-                      onClick={actionClick}
-                      id={el.id}
-                    >
-                      <RiDeleteBin5Line />
-                    </span>
-                  </td>
-                </tr>
-              </>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {sales.length === 0 ? (
+        <span style={{ display: "grid", marginTop: "20px" }}>
+          ENTER YOUR TRANSACTIONS NOW
+        </span>
+      ) : (
+        <div className="tableWrapper">
+          <table className="incomeTable">
+            <tbody>
+              <tr>
+                <th>Date</th>
+                <th>Vehicle Type</th>
+                <th>Plate Number</th>
+                <th>Services</th>
+                <th>Price</th>
+                <th className="actionHeading">Actions</th>
+              </tr>
+              {sales.map((el, i) => (
+                <>
+                  <tr className="incomeTableBody">
+                    <td>{el.date}</td>
+                    <td>{el.vehicleType}</td>
+                    <td>{el.plateNumber}</td>
+                    <td>{el.services}</td>
+                    <td>{el.price}</td>
+                    <td className="actions">
+                      <span
+                        className="actionsIcon"
+                        onClick={actionClick}
+                        id={el.id}
+                      >
+                        {/* <RiDeleteBin5Line /> */}
+                        DELETE
+                      </span>
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* <div className="incomeTable">
         <div className="tableHeadingWrapper">
