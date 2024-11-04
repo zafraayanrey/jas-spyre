@@ -40,38 +40,25 @@ const today = `${currentDate.getFullYear()}-${
 }-${currentDate.getDate()}`;
 
 function Expenses() {
-  // const inputRef = useNumberFormat(options);
-  // const defaultValue = format(0, options);
-
   const [value, setValue] = useState(0);
   const [id, setId] = useState(1);
   const [amount, setSales] = useState([]);
-  const [plateNumber, setPlateNumber] = useState("");
   const [date, setDate] = useState(today);
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm();
 
   function onSubmit(data) {
-    // console.log(data.date);
-    // if (data.date === "") return "Zaf";
     data.date === "" && (data.date = "Not Specified");
     setSales((prevArray) => [...prevArray, data]);
     setId(() => id + 1);
     toast.success("Transaction Added!");
     reset();
     setValue("");
-    setPlateNumber("");
-  }
-
-  function handleChange(e) {
-    const uppercase = e.target.value.toUpperCase();
-    setPlateNumber(uppercase);
   }
 
   function priceChange(e) {
@@ -116,12 +103,11 @@ function Expenses() {
           ), // Custom check icon color
         }}
       />
-      {/* <Toaster /> */}
+
       <div>
         <div className="incomeHeader">EXPENSES</div>
         <div>
-          {/* <form className="incomeContent"> */}
-          <form className="incomeContent">
+          <form className="expensesContent">
             <input
               {...register("id")}
               type="text"
@@ -133,8 +119,6 @@ function Expenses() {
               {...register("date", { required: true })}
               type="date"
               onChange={dateChange}
-              // defaultValue={today}
-              // value={date}
               className="date"
             ></input>
             <input
@@ -147,13 +131,17 @@ function Expenses() {
               type="text"
               placeholder="Agency"
             ></input>
-            {/* {errors.date && <span className="errorDate">Date is required</span>}
-            {errors.orNumber && (
-              <span className="errorPlateNumber">Plate number is required</span>
-            )}
-            {errors.price && (
-              <span className="errorPrice">Price is required</span>
-            )} */}
+            <div className="expErrWrapper">
+              {errors.date && (
+                <span className="dateRequired">Date is required</span>
+              )}
+              {errors.orNumber && (
+                <span className="orNumberRequired">OR Number is required</span>
+              )}
+              {errors.agency && (
+                <span className="agencyRequired">Agency is required</span>
+              )}
+            </div>
             <input
               {...register("payor", { required: true })}
               type="text"
@@ -172,21 +160,32 @@ function Expenses() {
               onChange={priceChange}
               onFocus={priceFocus}
               value={value}
-              // ref={inputRef}
             ></input>
-            <select {...register("mop")}>
+            <div className="expErrWrapper">
+              {errors.payor && (
+                <span className="payorRequired">Payor is required</span>
+              )}
+              {errors.particulars && (
+                <span className="particularsRequired">
+                  Particulars is required
+                </span>
+              )}
+              {errors.amount && (
+                <span className="amountRequired">Amount is required</span>
+              )}
+            </div>
+            <select className="mop" {...register("mop")}>
               {mop.map((el, i) => (
                 <option key={i}>{el}</option>
               ))}
             </select>
+            <div className="expErrWrapper">
+              {errors.mop && (
+                <span className="mopRequired">Mode of payment is required</span>
+              )}
+            </div>
 
-            {/* <NumericFormat
-              thousandSeparator={true}
-              prefix={"PHP "}
-              name="price"
-            /> */}
-
-            <button onClick={handleSubmit(onSubmit)} className="addIncome">
+            <button onClick={handleSubmit(onSubmit)} className="addExpenses">
               ADD
             </button>
           </form>
@@ -199,7 +198,7 @@ function Expenses() {
         </span>
       ) : (
         <div className="tableWrapper">
-          <table className="incomeTable">
+          <table className="expensesTable">
             <tbody>
               <tr>
                 <th>Date</th>
@@ -239,24 +238,6 @@ function Expenses() {
           </table>
         </div>
       )}
-
-      {/* <div className="incomeTable">
-        <div className="tableHeadingWrapper">
-          <div className="tableHeading">Vehicle Type</div>
-          <div className="tableHeading">Plate Number</div>
-          <div className="tableHeading">Availed Service</div>
-          <div className="tableHeading">Price</div>
-        </div>
-
-        {theArray.map((el) => (
-          <div className="tableBodyContainer">
-            <div className="tableBody">{el.vehicleType}</div>
-            <div className="tableBody">{el.plateNumber}</div>
-            <div className="tableBody">{el.services}</div>
-            <div className="tableBody">{el.price}</div>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }

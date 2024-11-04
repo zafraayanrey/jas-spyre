@@ -118,8 +118,17 @@ ad0001 */
   gap: 10px;
 }
 
+.expensesContent,
+.requiredWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
 .incomeContent input,
-.incomeContent select {
+.incomeContent select,
+.expensesContent input,
+.expensesContent select {
   text-align: center;
   font-size: large;
   padding: 5px;
@@ -140,6 +149,7 @@ ad0001 */
 
 .addExpenses {
   display: grid;
+  grid-column: 1/4;
   width: 25%;
   height: 50px;
   justify-self: center;
@@ -249,37 +259,20 @@ input.date {
     sans-serif;
 }
 
-.expensesEntries {
-  padding-top: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-}
-
-.expensesInput {
-  text-align: center;
-  font-size: large;
-  padding: 5px;
-}
-
 .mop {
   grid-column: 2/3;
 }
 
 .addExpenses {
   grid-column: 2/3;
+  width: 100%;
 }
 
-.expensesErrors {
+.expErrWrapper {
   display: grid;
   grid-column: 1/4;
   grid-template-columns: 1fr 1fr 1fr;
   font-size: small;
-}
-
-.errorDate,
-.errorPayor {
-  grid-column: 1/2;
 }
 
 .orNumber::-webkit-outer-spin-button,
@@ -290,18 +283,22 @@ input.date {
   margin: 0;
 }
 
-.errorOrNumber,
-.errorParticulars,
-.errorMop {
+.dateRequired,
+.payorRequired {
+  grid-column: 1/2;
+}
+
+.orNumberRequired,
+.particularsRequired,
+.mopRequired {
   grid-column: 2/3;
 }
 
-.errorAgency,
-.errorTotal {
+.agencyRequired,
+.amountRequired {
   grid-column: 3/4;
 }
 
-.expensesWrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+.mopRequired {
+  grid-column: 2/3;
 }
