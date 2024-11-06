@@ -3,8 +3,9 @@ import React, { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
-import { RiDeleteBin5Line } from "react-icons/ri";
+// import { MdDeleteOutline } from "react-icons/md";
+// import { RiDeleteBin5Line } from "react-icons/ri";
+import supabase from "./supabase";
 
 const vehicleType = [
   "Sedan",
@@ -56,16 +57,37 @@ function Sales() {
     formState: { errors },
   } = useForm();
 
-  function onSubmit(data) {
-    // console.log(data.date);
-    // if (data.date === "") return "Zaf";
-    data.date === "" && (data.date = "Not Specified");
-    setSales((prevArray) => [...prevArray, data]);
-    setId(() => id + 1);
-    toast.success("Transaction Added!");
-    reset();
-    setValue("");
-    setPlateNumber("");
+  useEffect(() => {
+    async function fetchingData() {
+      const { data, error } = await supabase.from("sales").select();
+      if (error) console.log("Failed Fetching the data");
+      if (data) setSales(data);
+    }
+
+    fetchingData();
+  });
+
+  async function onSubmit(data) {
+    // console.log(data.price);
+    const updatePrice = {
+      ...data,
+      price: parseFloat(data.price.replace(/,/g, "")),
+    };
+    // data1.date === "" && (data1.date = "Not Specified");
+    // setSales((prevArray) => [...prevArray, data]);
+    // setId(() => id + 1);
+
+    const { error } = await supabase.from("sales").insert(updatePrice);
+    if (error) console.log("error adding data");
+    if (error) {
+      toast.error("Unable to access the database!");
+      return;
+    } else {
+      reset();
+      toast.success("Transaction Added!");
+      setValue("");
+      setPlateNumber("");
+    }
   }
 
   function handleChange(e) {
@@ -74,16 +96,9 @@ function Sales() {
   }
 
   function priceChange(e) {
-    const formattedNumber = e.target.value.replace(/[^0-9]/g, ""); //setting the input box to only accepts numeric values
+    // const formattedNumber = e.target.value.replace(/[^0-9.]/g, ""); //setting the input box to only accepts numeric values
+    const formattedNumber = e.target.value.replace(/[^0-9.]/g, "");
     setValue(format(formattedNumber, options));
-  }
-
-  function priceClick() {
-    setValue("");
-  }
-
-  function priceFocus() {
-    setValue("");
   }
 
   function actionClick(e) {
@@ -106,6 +121,12 @@ function Sales() {
               primary: "white",
             },
           },
+          // error: {
+          //   style: {
+          //     backgroundColor: "red",
+          //     color: "orange",
+          //   },
+          // },
           icon: (
             <span
               style={{ display: "grid", color: "white", fontSize: "large" }}
@@ -120,13 +141,13 @@ function Sales() {
         <div className="incomeHeader">SALES INPUT</div>
         <div>
           <form className="incomeContent">
-            <input
+            {/* <input
               {...register("id")}
               type="text"
               placeholder="Id"
               value={id}
               hidden
-            ></input>
+            ></input> */}
             <input
               {...register("date", { required: true })}
               type="date"
@@ -157,11 +178,8 @@ function Sales() {
               {...register("price", { required: true })}
               type="text"
               placeholder="Price"
-              onClick={priceClick}
               onChange={priceChange}
-              onFocus={priceFocus}
               value={value}
-              // ref={inputRef}
             ></input>
 
             {/* <NumericFormat
@@ -202,12 +220,12 @@ function Sales() {
               </tr>
               {sales.map((el, i) => (
                 <>
-                  <tr className="incomeTableBody">
+                  <tr key={i} className="incomeTableBody">
                     <td>{el.date}</td>
                     <td>{el.vehicleType}</td>
                     <td>{el.plateNumber}</td>
                     <td>{el.services}</td>
-                    <td>{el.price}</td>
+                    <td>{format(el.price, options)}</td>
                     <td className="actions">
                       <span
                         className="actionsIcon"

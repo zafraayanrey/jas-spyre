@@ -8,11 +8,4 @@ const supabaseKey =
 // Initialize the Supabase client
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function reading() {
-  const { data, error } = await supabase.from("sales").select();
-
-  if (error) console.log("Failed Fetching the data");
-  if (data) console.log(data);
-}
-reading();
 export default supabase;

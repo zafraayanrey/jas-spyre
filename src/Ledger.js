@@ -1,7 +1,9 @@
 import React from "react";
 
 function Ledger() {
-  return <div>Ledger</div>;
+  // console.log(DataFetching());
+  // DataFetching();
+  return <div>ledger</div>;
 }
 
 export default Ledger;
