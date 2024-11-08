@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Sales from "./Sales";
-import Expenses from "./Expenses";
-import Ledger from "./Ledger";
-import Report from "./Report";
+import Sales from "./components/Sales";
+import Expenses from "./components/Expenses";
+import Ledger from "./components/Ledger";
+import Report from "./components/Report";
 
 function Canvass() {
   const test = useSelector((state) => state.menu);
