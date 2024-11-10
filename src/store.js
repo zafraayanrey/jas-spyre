@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import menuSlice from "./menu/menuSlice";
-import salesSlice from "./sales/salesSlice";
 import deleteSlice from "./sales/deleteSlice";
+import salesSlice from "./slice/salesSlice";
+import expensesSlice from "./slice/expensesSlice";
 
 const store = configureStore({
   reducer: {
     menu: menuSlice,
-    data: salesSlice,
     delete: deleteSlice,
+    sales: salesSlice,
+    expenses: expensesSlice,
   },
 });
 

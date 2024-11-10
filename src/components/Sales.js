@@ -5,12 +5,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
 // import { MdDeleteOutline } from "react-icons/md";
 // import { RiDeleteBin5Line } from "react-icons/ri";
-import supabase from "../database/supabase";
-// import { deleteRecordFromSupabase } from "../sales/deleteSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { insertRecordToSupabase } from "../sales/insertSlice";
-import { deleteRecordFromSupabase } from "../sales/deleteSlice";
-// import { insertRecordToSupabase } from "../sales/insertSlice";
+import { deleteRecord, fetchRecords, insertRecord } from "../slice/salesSlice";
 
 const vehicleType = [
   "Sedan",
@@ -45,16 +41,13 @@ const today = `${currentDate.getFullYear()}-${
 }-${currentDate.getDate()}`;
 
 function Sales() {
-  // const inputRef = useNumberFormat(options);
-  // const defaultValue = format(0, options);
-
   const [value, setValue] = useState(0);
-
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
   const [date, setDate] = useState(today);
+
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector((state) => state.data);
+  const { records, loading, error } = useSelector((state) => state.sales);
 
   const {
     register,
@@ -64,25 +57,19 @@ function Sales() {
   } = useForm();
 
   useEffect(() => {
-    async function fetchingData() {
-      const { data, error } = await supabase.from("sales").select();
-      if (error) console.log("Failed Fetching the data");
-      if (data) setSales(data);
-    }
+    dispatch(fetchRecords());
+  }, [dispatch]);
 
-    fetchingData();
-  });
-
-  async function onSubmit(data) {
+  function onSubmit(data) {
     const updatePrice = {
       ...data,
       price: parseFloat(data.price.replace(/,/g, "")),
     };
 
-    dispatch(insertRecordToSupabase(updatePrice));
+    if (error) return;
 
+    dispatch(insertRecord(updatePrice));
     reset();
-    toast.success("Transaction Added!");
     setValue("");
     setPlateNumber("");
   }
@@ -102,7 +89,7 @@ function Sales() {
   }
 
   async function handleDelete(e) {
-    dispatch(deleteRecordFromSupabase(e));
+    dispatch(deleteRecord(e));
   }
 
   return (
@@ -177,7 +164,7 @@ function Sales() {
         </div>
       </div>
 
-      {sales.length === 0 ? (
+      {records.length === 0 ? (
         <span style={{ display: "grid", marginTop: "20px" }}>
           ENTER YOUR TRANSACTIONS NOW
         </span>
@@ -193,7 +180,7 @@ function Sales() {
                 <th>Price</th>
                 <th className="actionHeading">Actions</th>
               </tr>
-              {sales.map((el, i) => (
+              {records.map((el, i) => (
                 <>
                   <tr key={i} className="incomeTableBody">
                     <td>{el.date}</td>

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchExpenses } from "../slice/expensesSlice";
 
 const mop = ["Cash", "Check", "Online Transfer"];
 const options = { locales: "en", maximumFractionDigits: 2 };
@@ -20,7 +21,13 @@ function Expenses() {
   const [date, setDate] = useState(today);
 
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector((state) => state.data);
+  const { records, loading, error } = useSelector((state) => state.expenses);
+
+  useEffect(() => {
+    dispatch(fetchExpenses());
+  }, [dispatch]);
+
+  console.log(records);
 
   const {
     register,
@@ -170,7 +177,7 @@ function Expenses() {
         </div>
       </div>
 
-      {amount.length === 0 ? (
+      {records.length === 0 ? (
         <span style={{ display: "grid", marginTop: "20px" }}>
           ENTER YOUR TRANSACTIONS NOW
         </span>
@@ -188,7 +195,7 @@ function Expenses() {
                 <th>Mode of Payment</th>
                 <th className="actionHeading">Actions</th>
               </tr>
-              {amount.map((el, i) => (
+              {records.map((el, i) => (
                 <>
                   <tr className="incomeTableBody">
                     <td>{el.date}</td>
