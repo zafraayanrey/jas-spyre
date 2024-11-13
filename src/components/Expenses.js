@@ -3,18 +3,14 @@ import React, { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchExpenses } from "../slice/expensesSlice";
 import { zafDate } from "../helpers/zafDate";
 import supabase from "../database/supabase";
-import { Experimental_CssVarsProvider } from "@mui/material";
 
 const mop = ["Cash", "Check", "Online Transfer"];
 const options = { locales: "en", maximumFractionDigits: 2 };
 
 function Expenses() {
   const [value, setValue] = useState(0);
-  const [id, setId] = useState(1);
   const [expenses, setExpenses] = useState([]);
   const [date, setDate] = useState(zafDate());
   const {
