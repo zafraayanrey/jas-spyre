@@ -49,8 +49,17 @@ function Expenses() {
     } else {
       toast.success("Transaction Added!");
       reset();
+      setValue("");
       expensesRecord();
     }
+  }
+
+  async function handleDelete(e) {
+    console.log(e);
+    const { error } = await supabase.from("expenses").delete().eq("id", e);
+
+    if (error) return;
+    expensesRecord();
   }
 
   function priceChange(e) {
@@ -153,9 +162,11 @@ function Expenses() {
                 <span className="amountRequired">Amount is required</span>
               )}
             </div>
-            <select className="mop" {...register("modeOfPayment")}>
+            <select className="mop">
               {mop.map((el, i) => (
-                <option key={i}>{el}</option>
+                <option {...register("modeOfPayment")} key={i}>
+                  {el}
+                </option>
               ))}
             </select>
             <div className="expErrWrapper">
@@ -198,10 +209,14 @@ function Expenses() {
                     <td>{el.payor}</td>
                     <td>{el.particulars}</td>
                     <td>{format(el.amount, options)}</td>
-                    <td>{el.mop}</td>
+                    <td>{el.modeOfPayment}</td>
 
                     <td className="actions">
-                      <span className="actionsIcon" id={el.id}>
+                      <span
+                        onClick={() => handleDelete(el.id)}
+                        className="actionsIcon"
+                        id={el.id}
+                      >
                         {/* <RiDeleteBin5Line /> */}
                         DELETE
                       </span>
