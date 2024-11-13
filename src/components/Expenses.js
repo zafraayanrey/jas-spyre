@@ -5,30 +5,18 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchExpenses } from "../slice/expensesSlice";
+import { zafDate } from "../helpers/zafDate";
+import supabase from "../database/supabase";
+import { Experimental_CssVarsProvider } from "@mui/material";
 
 const mop = ["Cash", "Check", "Online Transfer"];
 const options = { locales: "en", maximumFractionDigits: 2 };
 
-const currentDate = new Date();
-const today = `${currentDate.getFullYear()}-${
-  currentDate.getMonth() + 1
-}-${currentDate.getDate()}`;
-
 function Expenses() {
   const [value, setValue] = useState(0);
   const [id, setId] = useState(1);
-  const [amount, setSales] = useState([]);
-  const [date, setDate] = useState(today);
-
-  const dispatch = useDispatch();
-  const { records, loading, error } = useSelector((state) => state.expenses);
-
-  useEffect(() => {
-    dispatch(fetchExpenses());
-  }, [dispatch]);
-
-  console.log(records);
-
+  const [expenses, setExpenses] = useState([]);
+  const [date, setDate] = useState(zafDate());
   const {
     register,
     handleSubmit,
@@ -36,14 +24,33 @@ function Expenses() {
     formState: { errors },
   } = useForm();
 
-  function onSubmit(data) {
-    data.date === "" && (data.date = "Not Specified");
-    setSales((prevArray) => [...prevArray, data]);
-    setId(() => id + 1);
+  async function expensesRecord() {
+    const { data, error } = await supabase.from("expenses").select("*");
+    if (error) return;
+    if (data) setExpenses(data);
+  }
 
-    toast.success("Transaction Added!");
-    reset();
-    setValue("");
+  useEffect(() => {
+    expensesRecord();
+  }, []);
+
+  async function onSubmit(records) {
+    records.date === "" && (records.date = "Not Specified");
+
+    const updatePrice = {
+      ...records,
+      amount: parseFloat(records.amount.replace(/,/g, "")),
+    };
+
+    const { data, error } = await supabase.from("expenses").insert(updatePrice);
+
+    if (error) {
+      console.log(error);
+    } else {
+      toast.success("Transaction Added!");
+      reset();
+      expensesRecord();
+    }
   }
 
   function priceChange(e) {
@@ -57,12 +64,6 @@ function Expenses() {
 
   function priceFocus() {
     setValue("");
-  }
-
-  function actionClick(e) {
-    const deleteItem = amount.filter((number) => number.id !== e.target.id);
-    setSales(deleteItem);
-    toast.success("Deleted");
   }
 
   function dateChange(e) {
@@ -93,13 +94,6 @@ function Expenses() {
         <div className="incomeHeader">EXPENSES</div>
         <div>
           <form className="expensesContent">
-            <input
-              {...register("id")}
-              type="text"
-              placeholder="Id"
-              value={id}
-              hidden
-            ></input>
             <input
               {...register("date", { required: true })}
               type="date"
@@ -159,7 +153,7 @@ function Expenses() {
                 <span className="amountRequired">Amount is required</span>
               )}
             </div>
-            <select className="mop" {...register("mop")}>
+            <select className="mop" {...register("modeOfPayment")}>
               {mop.map((el, i) => (
                 <option key={i}>{el}</option>
               ))}
@@ -177,7 +171,7 @@ function Expenses() {
         </div>
       </div>
 
-      {records.length === 0 ? (
+      {expenses.length === 0 ? (
         <span style={{ display: "grid", marginTop: "20px" }}>
           ENTER YOUR TRANSACTIONS NOW
         </span>
@@ -195,7 +189,7 @@ function Expenses() {
                 <th>Mode of Payment</th>
                 <th className="actionHeading">Actions</th>
               </tr>
-              {records.map((el, i) => (
+              {expenses.map((el, i) => (
                 <>
                   <tr className="incomeTableBody">
                     <td>{el.date}</td>
@@ -203,15 +197,11 @@ function Expenses() {
                     <td>{el.agency}</td>
                     <td>{el.payor}</td>
                     <td>{el.particulars}</td>
-                    <td>{el.amount}</td>
+                    <td>{format(el.amount, options)}</td>
                     <td>{el.mop}</td>
 
                     <td className="actions">
-                      <span
-                        className="actionsIcon"
-                        onClick={actionClick}
-                        id={el.id}
-                      >
+                      <span className="actionsIcon" id={el.id}>
                         {/* <RiDeleteBin5Line /> */}
                         DELETE
                       </span>
