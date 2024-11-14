@@ -71,9 +71,9 @@ function Sales() {
     const { error } = await supabase.from("sales").insert(updatePrice);
     if (error) return;
     toast.success("Record Successfully Added!");
-    reset();
-    setValue("");
-    setPlateNumber("");
+    // reset();
+    // setValue("");
+    // setPlateNumber("");
 
     fetchPosts();
   }
