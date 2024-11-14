@@ -31,9 +31,17 @@ function Total() {
     // dateContainer.map((el, i) => me.push(el.charAt(5).concat(el.charAt(6))));
     dateContainer.map((el, i) => me.push(new Date(el)));
 
-    const uniqueMonths = [...new Set(me)]; // merging duplicate values
+    // console.log(me);
 
-    setDate(uniqueMonths);
+    // const uniqueMonths = [...new Set(me)]; // merging duplicate values
+    me.map((el) => [
+      console.log(monthText[el.getMonth()]),
+      console.log(el.getDate()),
+      console.log(el.getFullYear()),
+    ]);
+    // me.map((el) => console.log(el.getMonth()));
+    // me.map((el) => console.log(el.getFullYear()));
+    // setDate(me);
   }
 
   // console.log(date);
