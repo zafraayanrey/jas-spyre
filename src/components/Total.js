@@ -20,7 +20,7 @@ function Total() {
   const [records, setRecords] = useState([]);
   const [date, setDate] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const [ayaw, setAyaw] = useState([]);
+  const [ayaw, setAyaw] = useState();
 
   async function salesData() {
     const dateContainer = [];
@@ -28,14 +28,15 @@ function Total() {
     if (error) console.log(error);
     // if (data) data.map((el) => dateContainer.push(el.date));
     if (data) {
-      const zafra = [];
-      data.map((el) => zafra.push(new Date(el.date).getMonth()));
-
-      const monthmonth = [];
-      zafra.filter((el) => monthmonth.push(el === 10));
-      // const wew = [...new Set(zafra)];
-      // console.log(wew);
-      console.log(monthmonth);
+      const mik = [];
+      for (let x = 0; x < 12; x++) {
+        const months = data
+          .filter((el) => new Date(el.date).getMonth() === x)
+          .map((el) => el.price)
+          .reduce((acc, curr) => acc + curr, 0);
+        if (months) mik.push(months);
+      }
+      setAyaw(mik);
     }
 
     const me = [];
@@ -67,6 +68,7 @@ function Total() {
       {date.map((el, i) => (
         <div key={i}>{el}</div>
       ))}
+      {/* {ayaw.map((el) => el)} */}
     </div>
   );
 }
