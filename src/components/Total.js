@@ -20,6 +20,7 @@ function Total() {
   const [records, setRecords] = useState([]);
   const [date, setDate] = useState([]);
   const [expenses, setExpenses] = useState([]);
+  const [ayaw, setAyaw] = useState([]);
 
   async function salesData() {
     const dateContainer = [];
@@ -27,8 +28,14 @@ function Total() {
     if (error) console.log(error);
     // if (data) data.map((el) => dateContainer.push(el.date));
     if (data) {
-      const wew = data.filter((el) => el.date.includes("01"));
-      console.log(wew);
+      const zafra = [];
+      data.map((el) => zafra.push(new Date(el.date).getMonth()));
+
+      const monthmonth = [];
+      zafra.filter((el) => monthmonth.push(el === 10));
+      // const wew = [...new Set(zafra)];
+      // console.log(wew);
+      console.log(monthmonth);
     }
 
     const me = [];
@@ -38,11 +45,11 @@ function Total() {
     // console.log(me);
 
     // const uniqueMonths = [...new Set(me)]; // merging duplicate values
-    me.map((el) => [
-      console.log(monthText[el.getMonth()]),
-      console.log(el.getDate()),
-      console.log(el.getFullYear()),
-    ]);
+    // me.map((el) => [
+    //   console.log(monthText[el.getMonth()]),
+    //   console.log(el.getDate()),
+    //   console.log(el.getFullYear()),
+    // ]);
     // me.map((el) => console.log(el.getMonth()));
     // me.map((el) => console.log(el.getFullYear()));
     // setDate(me);
@@ -58,7 +65,7 @@ function Total() {
   return (
     <div>
       {date.map((el, i) => (
-        <div key={i}>{monthText[el.getMonth()]}</div>
+        <div key={i}>{el}</div>
       ))}
     </div>
   );
