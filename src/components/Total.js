@@ -25,7 +25,11 @@ function Total() {
     const dateContainer = [];
     const { data, error } = await supabase.from("sales").select("*");
     if (error) console.log(error);
-    if (data) data.map((el) => dateContainer.push(el.date));
+    // if (data) data.map((el) => dateContainer.push(el.date));
+    if (data) {
+      const wew = data.filter((el) => el.date.includes("01"));
+      console.log(wew);
+    }
 
     const me = [];
     // dateContainer.map((el, i) => me.push(el.charAt(5).concat(el.charAt(6))));
