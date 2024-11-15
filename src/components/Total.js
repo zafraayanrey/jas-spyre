@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../database/supabase";
+import { format } from "@react-input/number-format";
+import dateRange from "../helpers/dateRange";
+// import dateRange from '../helpers/'
 
 const monthText = [
   "January",
@@ -16,11 +19,13 @@ const monthText = [
   "December",
 ];
 
+const options = { locales: "en", maximumFractionDigits: 2 };
+
 function Total() {
   const [records, setRecords] = useState([]);
   const [date, setDate] = useState([]);
   const [monthNumber, setMonthNumber] = useState();
-  const [ayaw, setAyaw] = useState();
+  const [monthlyIncome, setMonthlyIncome] = useState([]);
 
   async function salesData() {
     const dateContainer = [];
@@ -30,17 +35,31 @@ function Total() {
     if (data) setRecords(data);
   }
 
+  // function annualTotal() {
+  //   const months = records
+  //     .filter((el) => new Date(el.date).getFullYear() === monthNumber)
+  //     .map((el) => el.price)
+  //     .reduce((acc, curr) => acc + curr, 0);
+  //   setMonthlyIncome(months);
+  // }
+
   function monthlyTotal() {
-    const months = records
-      .filter((el) => new Date(el.date).getMonth() === monthNumber)
-      .map((el) => el.price)
-      .reduce((acc, curr) => acc + curr, 0);
-    setAyaw(months);
+    const monthSales = [];
+    for (let x = 0; x < 12; x++) {
+      const months = records
+        .filter((el) => new Date(el.date).getMonth() === x)
+        .map((el) => el.price)
+        .reduce((acc, curr) => acc + curr, 0);
+      // monthSales.push(months);
+      monthSales.push(months);
+    }
+
+    return monthSales;
   }
 
   useEffect(() => {
     salesData();
-    monthlyTotal();
+    // monthlyTotal();
   }, [monthNumber]);
 
   function selectedMonth(e) {
@@ -87,15 +106,25 @@ function Total() {
     }
   }
 
-  // console.log(monthNumber);
   return (
-    <div>
-      <select onChange={selectedMonth}>
-        {monthText.map((el) => (
-          <option>{el}</option>
+    <div className="reportWrapper">
+      <div>
+        <label>Search By Year</label>
+        <select className="filterSales">
+          {dateRange.map((year) => (
+            <option>{year}</option>
+          ))}
+        </select>
+      </div>
+      <div className="monthlySalesWrapper">
+        {monthlyTotal().map((el, i) => (
+          <div className="monthlySales">
+            <div>{monthText[i]}</div>
+            <div>Total Sales:</div>
+            <div>{format(el, options)}</div>
+          </div>
         ))}
-      </select>
-      {ayaw}
+      </div>
     </div>
   );
 }
