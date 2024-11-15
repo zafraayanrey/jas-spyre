@@ -8,7 +8,7 @@ function Ledger() {
   return (
     <div>
       <SalesReport />
-      {/* <ExpensesReport /> */}
+      <ExpensesReport />
     </div>
   );
 }

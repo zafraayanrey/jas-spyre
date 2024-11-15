@@ -304,9 +304,11 @@ input.date {
   grid-column: 2/3;
 }
 
+/*-----------------Report--------------------------*/
+
 .reportContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr; */
   width: 100%;
   height: 100%;
   gap: 20px;
@@ -319,8 +321,8 @@ input.date {
 .barGraph {
   color: white !important;
   padding: 30px;
-  width: 80%;
-  height: 50%;
+  width: 90%;
+  height: 90%;
   border: solid 1px rgb(26, 26, 26);
   background-color: black;
 }
@@ -338,7 +340,6 @@ input.date {
   word-break: break-all;
 }
 
-/*-----------------Report--------------------------*/
 .reportWrapper {
   display: grid;
   height: 100dvh;
