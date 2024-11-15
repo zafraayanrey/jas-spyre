@@ -10,6 +10,24 @@ import {
   Rectangle,
   ResponsiveContainer,
 } from "recharts";
+import supabase from "../database/supabase";
+
+async function salesChart() {
+  const chartData = [];
+  const chartObject = {};
+
+  const { salesData, salesError } = await supabase.from("sales").select("*");
+  if (salesError) console.log(salesError);
+  if (salesData) console.log(salesData);
+
+  const { expensesData, expensesError } = await supabase
+    .from("expenses")
+    .select("*");
+  if (expensesError) console.log(expensesError);
+  if (expensesData) console.log(expensesData);
+}
+
+salesChart();
 
 const data = [
   {
