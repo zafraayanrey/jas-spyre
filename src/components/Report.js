@@ -14,7 +14,6 @@ import supabase from "../database/supabase";
 
 async function salesChart() {
   const chartData = [];
-  const chartObject = {};
 
   const { salesData, salesError } = await supabase.from("sales").select("*");
   if (salesError) console.log(salesError);
@@ -25,6 +24,12 @@ async function salesChart() {
     .select("*");
   if (expensesError) console.log(expensesError);
   if (expensesData) console.log(expensesData);
+
+  const chartObject = {
+    month: "",
+    sales: "",
+    expenses: "",
+  };
 }
 
 salesChart();
