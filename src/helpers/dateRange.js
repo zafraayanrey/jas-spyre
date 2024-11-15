@@ -1,4 +1,4 @@
-const startYear = 1960;
+const startYear = 2020;
 const endYear = new Date().getFullYear();
 
 function dateRange() {

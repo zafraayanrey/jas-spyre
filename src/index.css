@@ -371,6 +371,21 @@ input.date {
   cursor: pointer;
 }
 
+.monthlyExpenses {
+  margin: auto;
+  width: 90%;
+  align-content: center;
+  background-color: rgb(2, 66, 31);
+  border: solid 2px rgb(0, 0, 0);
+  padding: 10px 0px 10px 0px;
+}
+
+.monthlyExpenses:hover {
+  background-color: rgb(4, 97, 39);
+  border: solid 2px rgb(255, 255, 255);
+  cursor: pointer;
+}
+
 .filterSales {
   display: grid;
   width: 25%;

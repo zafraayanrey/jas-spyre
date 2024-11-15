@@ -101,6 +101,11 @@ function Report() {
               fill="red"
               activeBar={<Rectangle fill="red" stroke="gray" />}
             />
+            <Bar
+              dataKey="amt"
+              fill="orange"
+              activeBar={<Rectangle fill="yellow" stroke="green" />}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

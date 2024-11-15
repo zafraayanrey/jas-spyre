@@ -1,12 +1,14 @@
 import React from "react";
-import Total from "./Total";
+import SalesReport from "./SalesReport";
+import ExpensesReport from "./ExpensesReport";
 
 function Ledger() {
   // console.log(DataFetching());
   // DataFetching();
   return (
     <div>
-      <Total />
+      {/* <SalesReport /> */}
+      <ExpensesReport />
     </div>
   );
 }

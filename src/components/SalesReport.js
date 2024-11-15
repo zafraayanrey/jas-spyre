@@ -21,11 +21,12 @@ const monthText = [
 
 const options = { locales: "en", maximumFractionDigits: 2 };
 
-function Total() {
+function SalesReport() {
   const [records, setRecords] = useState([]);
   const [date, setDate] = useState([]);
   const [monthNumber, setMonthNumber] = useState();
   const [monthlyIncome, setMonthlyIncome] = useState([]);
+  const [year, setYear] = useState();
 
   async function salesData() {
     const dateContainer = [];
@@ -47,6 +48,7 @@ function Total() {
     const monthSales = [];
     for (let x = 0; x < 12; x++) {
       const months = records
+        .filter((el) => new Date(el.date).getFullYear() === year)
         .filter((el) => new Date(el.date).getMonth() === x)
         .map((el) => el.price)
         .reduce((acc, curr) => acc + curr, 0);
@@ -62,55 +64,15 @@ function Total() {
     // monthlyTotal();
   }, [monthNumber]);
 
-  function selectedMonth(e) {
-    const selectMon = e.target.value;
-    switch (selectMon) {
-      case monthText[0]:
-        setMonthNumber(0);
-        break;
-      case monthText[1]:
-        setMonthNumber(1);
-        break;
-      case monthText[2]:
-        setMonthNumber(2);
-        break;
-      case monthText[3]:
-        setMonthNumber(3);
-        break;
-      case monthText[4]:
-        setMonthNumber(4);
-        break;
-      case monthText[5]:
-        setMonthNumber(5);
-        break;
-      case monthText[6]:
-        setMonthNumber(6);
-        break;
-      case monthText[7]:
-        setMonthNumber(7);
-        break;
-      case monthText[8]:
-        setMonthNumber(8);
-        break;
-      case monthText[9]:
-        setMonthNumber(9);
-        break;
-      case monthText[10]:
-        setMonthNumber(10);
-        break;
-      case monthText[11]:
-        setMonthNumber(11);
-        break;
-      default:
-        return selectMon;
-    }
+  function handleChange(e) {
+    setYear(+e.target.value);
   }
 
   return (
     <div className="reportWrapper">
       <div>
-        <label>Search By Year</label>
-        <select className="filterSales">
+        <label>Filter By Year: {year}</label>
+        <select onChange={handleChange} className="filterSales">
           {dateRange.map((year) => (
             <option>{year}</option>
           ))}
@@ -129,4 +91,4 @@ function Total() {
   );
 }
 
-export default Total;
+export default SalesReport;
