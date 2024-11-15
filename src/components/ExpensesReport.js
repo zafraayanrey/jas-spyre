@@ -2,22 +2,8 @@ import React, { useEffect, useState } from "react";
 import supabase from "../database/supabase";
 import { format } from "@react-input/number-format";
 import dateRange from "../helpers/dateRange";
+import { monthText } from "../helpers/monthText";
 // import dateRange from '../helpers/'
-
-const monthText = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const options = { locales: "en", maximumFractionDigits: 2 };
 

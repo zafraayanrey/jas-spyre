@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,28 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import supabase from "../database/supabase";
-
-async function salesChart() {
-  const chartData = [];
-
-  const { salesData, salesError } = await supabase.from("sales").select("*");
-  if (salesError) console.log(salesError);
-  if (salesData) console.log(salesData);
-
-  const { expensesData, expensesError } = await supabase
-    .from("expenses")
-    .select("*");
-  if (expensesError) console.log(expensesError);
-  if (expensesData) console.log(expensesData);
-
-  const chartObject = {
-    month: "",
-    sales: "",
-    expenses: "",
-  };
-}
-
-salesChart();
+import { monthText } from "../helpers/monthText";
+import dateRange from "../helpers/dateRange";
 
 const data = [
   {
@@ -93,8 +73,76 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 function Report() {
+  const [filterDropdown, setFilterDropdown] = useState(2024);
+  const [barData, setBarData] = useState();
+
+  async function salesChart() {
+    const chartData = [];
+
+    const { data: salesData, error: salesError } = await supabase
+      .from("sales")
+      .select("*");
+    const { data: expensesData, error: expensesError } = await supabase
+      .from("expenses")
+      .select("*");
+
+    if (salesError) console.log(salesError);
+    if (expensesError) console.log(expensesError);
+
+    // if (salesData) console.log(salesData);
+    // if (expensesData) console.log(expensesData);
+
+    const chartObject = {
+      month: "",
+      sales: "",
+      expenses: "",
+    };
+
+    if (salesData && expensesData) {
+      const overAllDataArray = [];
+      for (let x = 0; x < 12; x++) {
+        const monthSales = salesData
+          .filter((el) => new Date(el.date).getFullYear() === filterDropdown)
+          .filter((el) => new Date(el.date).getMonth() === x)
+          .map((el) => el.price)
+          .reduce((acc, curr) => acc + curr, 0); //change later the date do not hardcode //change later the day
+
+        const monthExpenses = expensesData
+          .filter((el) => new Date(el.date).getFullYear() === filterDropdown)
+          .filter((el) => new Date(el.date).getMonth() === x)
+          .map((el) => el.amount)
+          .reduce((acc, curr) => acc + curr, 0); //change later the date do not hardcode //change later the day
+
+        const overAllData = {
+          ...chartObject,
+          month: monthText[x],
+          sales: monthSales,
+          expenses: monthExpenses,
+        };
+        overAllDataArray.push(overAllData);
+      }
+
+      setBarData(overAllDataArray);
+    }
+  }
+
+  useEffect(() => {
+    salesChart();
+  }, [filterDropdown]);
+
+  function handleChange(e) {
+    setFilterDropdown(+e.target.value);
+  }
+  console.log(barData);
+  console.log(data);
   return (
     <div className="reportContainer">
+      <select className="filterSales" onChange={handleChange}>
+        {dateRange.map((el) => (
+          <option>{el}</option>
+        ))}
+      </select>
+      {filterDropdown}
       <div className="barGraph">
         <ResponsiveContainer style={{ height: "100dvh" }}>
           <BarChart
