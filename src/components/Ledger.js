@@ -7,8 +7,8 @@ function Ledger() {
   // DataFetching();
   return (
     <div>
-      {/* <SalesReport /> */}
-      <ExpensesReport />
+      <SalesReport />
+      {/* <ExpensesReport /> */}
     </div>
   );
 }
