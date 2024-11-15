@@ -63,8 +63,9 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
-        <p className="label">{`${label[1]} : ${payload[1].value}`}</p>
+        {/* <p className="label">{`${label} : ${payload[0].value}`}</p> */}
+        <p className="label">{`Total sales: ${payload[0].value}`}</p>
+        <p className="label">{`Total expenses: ${payload[1].value}`}</p>
         {/* <p className="intro">{getIntroOfPage(label)}</p> */}
         <p className="desc">Anything you want can be displayed here.</p>
       </div>
@@ -146,7 +147,7 @@ function Report() {
       <div className="barGraph">
         <ResponsiveContainer style={{ height: "100dvh" }}>
           <BarChart
-            data={data}
+            data={barData}
             margin={{
               top: 5,
               right: 30,
@@ -155,7 +156,7 @@ function Report() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="month" />
             <YAxis />
             <Tooltip
               content={CustomTooltip}
@@ -163,51 +164,18 @@ function Report() {
             />
             <Legend />
             <Bar
-              dataKey="uv"
-              fill="white"
-              activeBar={<Rectangle fill="white" stroke="gray" />}
+              dataKey="sales"
+              fill="green"
+              activeBar={<Rectangle fill="yellow" stroke="gray" />}
             />
             <Bar
-              dataKey="pv"
+              dataKey="expenses"
               fill="red"
-              activeBar={<Rectangle fill="red" stroke="gray" />}
-            />
-            <Bar
-              dataKey="amt"
-              fill="orange"
-              activeBar={<Rectangle fill="yellow" stroke="green" />}
+              activeBar={<Rectangle fill="redorange" stroke="gray" />}
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
-      {/* <div className="barGraph">
-        <ResponsiveContainer style={{ height: "100dvh" }}>
-          <BarChart
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar
-              dataKey="uv"
-              fill="#B3CDAD"
-              activeBar={<Rectangle fill="pink" stroke="blue" />}
-            />
-            <Bar
-              dataKey="pv"
-              fill="#FF5F5E"
-              activeBar={<Rectangle fill="gold" stroke="purple" />}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div> */}
     </div>
   );
 }
