@@ -348,16 +348,37 @@ input.date {
   text-align: center;
 }
 
-.monthlySalesWrapper {
+.monthlySalesWrapper,
+.monthlyExpensesWrapper {
+  font-size: large;
   margin-top: 50px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   text-align: center;
-  gap: 10px;
 }
 
-.monthlySales {
+.monthlySalesWrapper td {
+  padding: 5px;
+  background-color: rgb(71, 206, 71);
+}
+
+.monthlyExpensesWrapper td {
+  padding: 5px;
+  background-color: rgb(163, 47, 47);
+}
+
+.monthlySalesWrapper th {
+  background-color: rgb(13, 94, 3);
+  padding: 5px;
+}
+
+.monthlyExpensesWrapper th {
+  padding: 5px;
+  background-color: rgb(110, 4, 4);
+}
+
+.monthlyExpenses {
   margin: auto;
   width: 90%;
   align-content: center;
@@ -366,13 +387,13 @@ input.date {
   padding: 10px 0px 10px 0px;
 }
 
-.monthlySales:hover {
+.monthlyExpenses:hover {
   background-color: rgb(65, 4, 4);
   border: solid 2px rgb(255, 255, 255);
   cursor: pointer;
 }
 
-.monthlyExpenses {
+.monthlySales {
   margin: auto;
   width: 90%;
   align-content: center;
@@ -381,7 +402,7 @@ input.date {
   padding: 10px 0px 10px 0px;
 }
 
-.monthlyExpenses:hover {
+.monthlySales:hover {
   background-color: rgb(4, 97, 39);
   border: solid 2px rgb(255, 255, 255);
   cursor: pointer;
@@ -392,4 +413,20 @@ input.date {
   width: 25%;
   text-align: center;
   margin: auto;
+}
+
+.ledgerContainer {
+  margin: auto;
+  display: grid;
+  gap: 10px;
+  width: 90%;
+  grid-template-columns: 1fr 1fr;
+}
+
+.heading {
+  font-size: x-large;
+}
+
+.tableHeading {
+  background-color: rgb(112, 7, 7);
 }

@@ -57,7 +57,7 @@ function SalesReport() {
   return (
     <div className="reportWrapper">
       <div>
-        <label>Filter By Year: {year}</label>
+        <label className="heading">Sales</label>
         <select onChange={handleChange} className="filterSales">
           {dateRange.map((year) => (
             <option>{year}</option>
@@ -65,13 +65,22 @@ function SalesReport() {
         </select>
       </div>
       <div className="monthlySalesWrapper">
-        {monthlyTotal().map((el, i) => (
-          <div className="monthlySales">
-            <div>{monthText[i]}</div>
-            <div>Total Sales:</div>
-            <div>{format(el, options)}</div>
-          </div>
-        ))}
+        <table>
+          <tbody>
+            <tr>
+              <th>Month</th>
+              <th>Total Sales</th>
+            </tr>
+
+            {monthlyTotal().map((el, i) => (
+              <tr>
+                <td>{monthText[i]}</td>
+
+                <td>{format(el, options)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

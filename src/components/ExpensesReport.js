@@ -47,21 +47,30 @@ function ExpensesReport() {
   return (
     <div className="reportWrapper">
       <div>
-        <label>Filter By Year: {year}</label>
+        <label className="heading">Expenses</label>
         <select onChange={handleChange} className="filterSales">
           {dateRange.map((year) => (
             <option>{year}</option>
           ))}
         </select>
       </div>
-      <div className="monthlySalesWrapper">
-        {monthlyTotal().map((el, i) => (
-          <div className="monthlyExpenses">
-            <div>{monthText[i]}</div>
-            <div>Total Expenses:</div>
-            <div>{format(el, options)}</div>
-          </div>
-        ))}
+      <div className="monthlyExpensesWrapper">
+        <table>
+          <tbody>
+            <tr className="tableHeading">
+              <th>Month</th>
+              <th>Total Expenses</th>
+            </tr>
+
+            {monthlyTotal().map((el, i) => (
+              <tr className="tableContent">
+                <td>{monthText[i]}</td>
+
+                <td>{format(el, options)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
