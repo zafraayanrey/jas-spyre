@@ -3,13 +3,10 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
-// import { MdDeleteOutline } from "react-icons/md";
-// import { RiDeleteBin5Line } from "react-icons/ri";
 import supabase from "../database/supabase";
 import { zafDate } from "../utils/zafDate";
 import services from "../helpers/services";
 import vehicle from "../helpers/vehicle";
-// import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 
 const options = { locales: "en", maximumFractionDigits: 2 };
@@ -23,12 +20,15 @@ function Sales() {
   const [servicesArray, setServicesArray] = useState([]);
   const [vtArray, setVtArray] = useState([]);
 
-  const componentRef = useRef();
+  const contentRef = useRef();
+  const reactToPrintFn = useReactToPrint({ contentRef });
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    // content1: () => componentRef1.current
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current, // Target content to print
+  //   documentTitle: "My Printed Document", // Optional: Title of the printed document
+  //   pageStyle: "print", // Optional: Custom page styles for print
+  //   onAfterPrint: () => console.log("Printing finished!"), // Optional: Callback after printing
+  // });
 
   const {
     register,
@@ -173,9 +173,10 @@ function Sales() {
       ) : (
         <>
           {/* Button to trigger print */}
-          <button onClick={handlePrint}>Print article</button>
-          <div className="tableWrapper">
-            <table className="incomeTable" ref={componentRef}>
+          <button onClick={reactToPrintFn}>Print this page</button>
+
+          <div className="tableWrapper" ref={contentRef}>
+            <table className="incomeTable">
               <tbody>
                 <tr>
                   <th>Date</th>
