@@ -2,9 +2,9 @@ import React from "react";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { IoMdBook } from "react-icons/io";
 import { IoBookmarksOutline } from "react-icons/io5";
-import { MdOutlineBookmarkRemove } from "react-icons/md";
+import { MdOutlineBookmarkRemove, MdOutlineSettings } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { income, expenses, ledger, report } from "./menuSlice";
+import { income, expenses, ledger, report, settings } from "./menuSlice";
 
 function Menu() {
   const menuNames = useSelector((state) => state.menu);
@@ -39,6 +39,12 @@ function Menu() {
           <HiOutlineDocumentReport />
         </span>
         <span>Report</span>
+      </div>
+      <div onClick={() => dispatch(settings())} className="menuLinks report">
+        <span className="icon">
+          <MdOutlineSettings />
+        </span>
+        <span>Settings</span>
       </div>
     </div>
   );

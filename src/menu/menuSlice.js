@@ -21,8 +21,11 @@ const menu = createSlice({
     report: (state, action) => {
       return { ...state, value: "report" };
     },
+    settings: (state, action) => {
+      return { ...state, value: "settings" };
+    },
   },
 });
 
-export const { income, expenses, ledger, report } = menu.actions;
+export const { income, expenses, ledger, report, settings } = menu.actions;
 export default menu.reducer;

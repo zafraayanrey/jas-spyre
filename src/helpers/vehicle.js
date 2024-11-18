@@ -1,6 +1,6 @@
 import supabase from "../database/supabase";
 
-async function vehicleType() {
+async function vehicle() {
   const { data, error } = await supabase.from("vehicleType").select("*");
 
   if (error) console.log(error);
@@ -9,4 +9,4 @@ async function vehicleType() {
   }
 }
 
-export default vehicleType;
+export default vehicle;

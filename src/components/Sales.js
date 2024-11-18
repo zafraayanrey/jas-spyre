@@ -1,5 +1,5 @@
 import { format } from "@react-input/number-format";
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
@@ -8,7 +8,9 @@ import { FaRegSave } from "react-icons/fa";
 import supabase from "../database/supabase";
 import { zafDate } from "../utils/zafDate";
 import services from "../helpers/services";
-import vehicleType from "../helpers/vehicleType";
+import vehicle from "../helpers/vehicle";
+// import ReactToPrint from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 
 const options = { locales: "en", maximumFractionDigits: 2 };
 
@@ -18,9 +20,15 @@ function Sales() {
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
   const [date, setDate] = useState(zafDate());
-
   const [servicesArray, setServicesArray] = useState([]);
   const [vtArray, setVtArray] = useState([]);
+
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    // content1: () => componentRef1.current
+  });
 
   const {
     register,
@@ -45,7 +53,7 @@ function Sales() {
       .then((res) => setServicesArray(res))
       .catch((err) => console.log(err));
 
-    vehicleType()
+    vehicle()
       .then((res) => setVtArray(res))
       .catch((err) => console.log(err));
   }, []);
@@ -163,41 +171,45 @@ function Sales() {
           ENTER YOUR TRANSACTIONS NOW
         </span>
       ) : (
-        <div className="tableWrapper">
-          <table className="incomeTable">
-            <tbody>
-              <tr>
-                <th>Date</th>
-                <th>Vehicle Type</th>
-                <th>Plate Number</th>
-                <th>Services</th>
-                <th>Price</th>
-                <th className="actionHeading">Actions</th>
-              </tr>
-              {sales.map((el, i) => (
-                // <div key={i}>
-                <tr key={i} className="incomeTableBody">
-                  <td>{el.date}</td>
-                  <td>{el.vehicleType}</td>
-                  <td>{el.plateNumber}</td>
-                  <td>{el.services}</td>
-                  <td>{format(el.price, options)}</td>
-                  <td className="actions">
-                    <span
-                      className="actionsIcon"
-                      onClick={() => handleDelete(el.id)}
-                      id={el.id}
-                    >
-                      {/* <RiDeleteBin5Line /> */}
-                      DELETE
-                    </span>
-                  </td>
+        <>
+          {/* Button to trigger print */}
+          <button onClick={handlePrint}>Print article</button>
+          <div className="tableWrapper">
+            <table className="incomeTable" ref={componentRef}>
+              <tbody>
+                <tr>
+                  <th>Date</th>
+                  <th>Vehicle Type</th>
+                  <th>Plate Number</th>
+                  <th>Services</th>
+                  <th>Price</th>
+                  <th className="actionHeading">Actions</th>
                 </tr>
-                // </div>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                {sales.map((el, i) => (
+                  // <div key={i}>
+                  <tr key={i} className="incomeTableBody">
+                    <td>{el.date}</td>
+                    <td>{el.vehicleType}</td>
+                    <td>{el.plateNumber}</td>
+                    <td>{el.services}</td>
+                    <td>{format(el.price, options)}</td>
+                    <td className="actions">
+                      <span
+                        className="actionsIcon"
+                        onClick={() => handleDelete(el.id)}
+                        id={el.id}
+                      >
+                        {/* <RiDeleteBin5Line /> */}
+                        DELETE
+                      </span>
+                    </td>
+                  </tr>
+                  // </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );
