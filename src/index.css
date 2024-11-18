@@ -437,7 +437,7 @@ input.date {
   grid-template-columns: 1fr 1fr 1fr;
   text-align: center;
   height: 100dvh;
-  font-size: large;
+  font-size: small;
 }
 
 .settingsContainer li {

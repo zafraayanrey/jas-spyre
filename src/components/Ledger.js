@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SalesReport from "./SalesReport";
 import ExpensesReport from "./ExpensesReport";
 import services from "../helpers/services";
+import NetIncome from "./NetIncome";
 
 function Ledger() {
   // console.log(DataFetching());
@@ -21,6 +22,7 @@ function Ledger() {
 
   return (
     <div className="ledgerContainer">
+      <NetIncome />
       <SalesReport />
       <ExpensesReport />
     </div>
