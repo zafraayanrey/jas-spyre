@@ -3,16 +3,18 @@ import React, { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { FaRegSave } from "react-icons/fa";
-import { zafDate } from "../helpers/zafDate";
+import { zafDate } from "../utils/zafDate";
 import supabase from "../database/supabase";
+import modeOfPayment from "../helpers/modeOfPayment";
 
-const mop = ["Cash", "Check", "Online Transfer"];
+// const mop = ["Cash", "Check", "Online Transfer"];
 const options = { locales: "en", maximumFractionDigits: 2 };
 
 function Expenses() {
   const [value, setValue] = useState(0);
   const [expenses, setExpenses] = useState([]);
   const [date, setDate] = useState(zafDate());
+  const [mop, setMop] = useState([]);
   const {
     register,
     handleSubmit,
@@ -28,6 +30,10 @@ function Expenses() {
 
   useEffect(() => {
     expensesRecord();
+
+    modeOfPayment()
+      .then((res) => setMop(res))
+      .catch((err) => console.log(err));
   }, []);
 
   async function onSubmit(records) {
@@ -161,7 +167,7 @@ function Expenses() {
             <select className="mop">
               {mop.map((el, i) => (
                 <option {...register("modeOfPayment")} key={i}>
-                  {el}
+                  {el.modeOfPayment}
                 </option>
               ))}
             </select>
@@ -197,28 +203,26 @@ function Expenses() {
                 <th className="actionHeading">Actions</th>
               </tr>
               {expenses.map((el, i) => (
-                <>
-                  <tr className="incomeTableBody">
-                    <td>{el.date}</td>
-                    <td>{el.orNumber}</td>
-                    <td>{el.agency}</td>
-                    <td>{el.payor}</td>
-                    <td>{el.particulars}</td>
-                    <td>{format(el.amount, options)}</td>
-                    <td>{el.modeOfPayment}</td>
+                <tr key={i} className="incomeTableBody">
+                  <td>{el.date}</td>
+                  <td>{el.orNumber}</td>
+                  <td>{el.agency}</td>
+                  <td>{el.payor}</td>
+                  <td>{el.particulars}</td>
+                  <td>{format(el.amount, options)}</td>
+                  <td>{el.modeOfPayment}</td>
 
-                    <td className="actions">
-                      <span
-                        onClick={() => handleDelete(el.id)}
-                        className="actionsIcon"
-                        id={el.id}
-                      >
-                        {/* <RiDeleteBin5Line /> */}
-                        DELETE
-                      </span>
-                    </td>
-                  </tr>
-                </>
+                  <td className="actions">
+                    <span
+                      onClick={() => handleDelete(el.id)}
+                      className="actionsIcon"
+                      id={el.id}
+                    >
+                      {/* <RiDeleteBin5Line /> */}
+                      DELETE
+                    </span>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>

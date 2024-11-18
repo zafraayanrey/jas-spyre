@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import supabase from "../database/supabase";
-import { monthText } from "../helpers/monthText";
-import dateRange from "../helpers/dateRange";
+import { monthText } from "../utils/monthText";
+import dateRange from "../utils/dateRange";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -94,8 +94,8 @@ function Report() {
     <div className="reportContainer">
       <span>SELECT YEAR</span>
       <select className="filterSales" onChange={handleChange}>
-        {dateRange.map((el) => (
-          <option>{el}</option>
+        {dateRange.map((el, i) => (
+          <option key={i}>{el}</option>
         ))}
       </select>
 

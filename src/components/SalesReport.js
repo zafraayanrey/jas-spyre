@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../database/supabase";
 import { format } from "@react-input/number-format";
-import dateRange from "../helpers/dateRange";
-import { monthText } from "../helpers/monthText";
+import dateRange from "../utils/dateRange";
+import { monthText } from "../utils/monthText";
 // import dateRange from '../helpers/'
 
 const options = { locales: "en", maximumFractionDigits: 2 };
@@ -59,8 +59,8 @@ function SalesReport() {
       <div>
         <label className="heading">Sales</label>
         <select onChange={handleChange} className="filterSales">
-          {dateRange.map((year) => (
-            <option>{year}</option>
+          {dateRange.map((year, i) => (
+            <option key={i}>{year}</option>
           ))}
         </select>
       </div>
@@ -73,7 +73,7 @@ function SalesReport() {
             </tr>
 
             {monthlyTotal().map((el, i) => (
-              <tr>
+              <tr key={i}>
                 <td>{monthText[i]}</td>
 
                 <td>{format(el, options)}</td>

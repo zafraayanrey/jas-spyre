@@ -6,32 +6,9 @@ import { FaRegSave } from "react-icons/fa";
 // import { MdDeleteOutline } from "react-icons/md";
 // import { RiDeleteBin5Line } from "react-icons/ri";
 import supabase from "../database/supabase";
-import { zafDate } from "../helpers/zafDate";
-
-const vehicleType = [
-  "Sedan",
-  "Hatchback",
-  "Coupe",
-  "SUV",
-  "Sportscar",
-  "Convertible",
-  "Crossover",
-  "Muscle Car",
-  "Station Wagon",
-  "Pickup Truck",
-];
-
-const services = [
-  "Body Wash Tire Black",
-  "Body Wash Vacuum Tire Black",
-  "Body Wash Vacuum Armor All Tire Black",
-  "Body Wash Vacuum Armor All Tire Black Wax",
-  "Seat Cover Removal",
-  "Seat Cover Installation",
-  "Engine Wash",
-  "Vacuum",
-  "Armor All",
-];
+import { zafDate } from "../utils/zafDate";
+import services from "../helpers/services";
+import vehicleType from "../helpers/vehicleType";
 
 const options = { locales: "en", maximumFractionDigits: 2 };
 
@@ -41,6 +18,9 @@ function Sales() {
   const [sales, setSales] = useState([]);
   const [plateNumber, setPlateNumber] = useState("");
   const [date, setDate] = useState(zafDate());
+
+  const [servicesArray, setServicesArray] = useState([]);
+  const [vtArray, setVtArray] = useState([]);
 
   const {
     register,
@@ -60,6 +40,14 @@ function Sales() {
 
   useEffect(() => {
     fetchPosts();
+
+    services()
+      .then((res) => setServicesArray(res))
+      .catch((err) => console.log(err));
+
+    vehicleType()
+      .then((res) => setVtArray(res))
+      .catch((err) => console.log(err));
   }, []);
 
   async function onSubmit(data) {
@@ -131,8 +119,8 @@ function Sales() {
             ></input>
 
             <select {...register("vehicleType")}>
-              {vehicleType.map((el, i) => (
-                <option key={i}>{el}</option>
+              {vtArray.map((el, i) => (
+                <option key={i}>{el.vehicleType}</option>
               ))}
             </select>
             <input
@@ -143,8 +131,8 @@ function Sales() {
               value={plateNumber}
             ></input>
             <select {...register("services")}>
-              {services.map((el, i) => (
-                <option key={i}>{el}</option>
+              {servicesArray.map((el, i) => (
+                <option key={i}>{el.services}</option>
               ))}
             </select>
             <input
@@ -187,25 +175,25 @@ function Sales() {
                 <th className="actionHeading">Actions</th>
               </tr>
               {sales.map((el, i) => (
-                <>
-                  <tr key={i} className="incomeTableBody">
-                    <td>{el.date}</td>
-                    <td>{el.vehicleType}</td>
-                    <td>{el.plateNumber}</td>
-                    <td>{el.services}</td>
-                    <td>{format(el.price, options)}</td>
-                    <td className="actions">
-                      <span
-                        className="actionsIcon"
-                        onClick={() => handleDelete(el.id)}
-                        id={el.id}
-                      >
-                        {/* <RiDeleteBin5Line /> */}
-                        DELETE
-                      </span>
-                    </td>
-                  </tr>
-                </>
+                // <div key={i}>
+                <tr key={i} className="incomeTableBody">
+                  <td>{el.date}</td>
+                  <td>{el.vehicleType}</td>
+                  <td>{el.plateNumber}</td>
+                  <td>{el.services}</td>
+                  <td>{format(el.price, options)}</td>
+                  <td className="actions">
+                    <span
+                      className="actionsIcon"
+                      onClick={() => handleDelete(el.id)}
+                      id={el.id}
+                    >
+                      {/* <RiDeleteBin5Line /> */}
+                      DELETE
+                    </span>
+                  </td>
+                </tr>
+                // </div>
               ))}
             </tbody>
           </table>
