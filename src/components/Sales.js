@@ -173,7 +173,7 @@ function Sales() {
       ) : (
         <>
           {/* Button to trigger print */}
-          <button onClick={reactToPrintFn}>Print this page</button>
+          {/* <button onClick={reactToPrintFn}>Print this page</button> */}
 
           <div className="tableWrapper" ref={contentRef}>
             <table className="incomeTable">

@@ -35,6 +35,7 @@ function VehicleType() {
     <div className="setIndWrapper">
       <form>
         <div>
+          <span></span>
           <input
             type="text"
             {...register("vehicleType", { required: true })}

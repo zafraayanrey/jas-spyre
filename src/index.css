@@ -420,7 +420,7 @@ input.date {
   display: grid;
   gap: 10px;
   width: 90%;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .heading {
@@ -479,4 +479,21 @@ input.date {
 .setIndWrapper input {
   font-size: x-large;
   text-align: center;
+}
+
+.belowZero {
+  background-color: red !important;
+  color: white;
+}
+
+.aboveZero {
+  background-color: darkgreen !important;
+  color: white;
+}
+
+.annualNet {
+  background-color: blue !important;
+  font-size: x-large;
+  color: black;
+  font-weight: bold;
 }

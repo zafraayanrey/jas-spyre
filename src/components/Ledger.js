@@ -22,9 +22,9 @@ function Ledger() {
 
   return (
     <div className="ledgerContainer">
-      <NetIncome />
       <SalesReport />
       <ExpensesReport />
+      <NetIncome />
     </div>
   );
 }
